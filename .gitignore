@@ -2,3 +2,7 @@ env
 _pycache__
 .env
 .cache
+data
+working
+model.h5
+emotion_recognition_model.h5
