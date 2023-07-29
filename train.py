@@ -8,7 +8,6 @@ from keras.utils import to_categorical
 import matplotlib.pyplot as plt
 
 data = pd.read_csv("./data/train.csv/train.csv")
-train_data = pd.read_csv("./data/test.csv/test.csv")
 X_train = []
 y_train = []
 X_test = []
@@ -26,11 +25,6 @@ for i, row in enumerate(data.index):
 X_train = np.array(X_train) / 255.0
 X_train = X_train.reshape(X_train.shape[0], 48, 48, 1)
 y_train = np.array(y_train)
-
-for i in range(5, 7):
-    plt.imshow(X_train[i], cmap='gray')
-    plt.show()
-
 
 num_classes = 7
 y_train = to_categorical(y_train, num_classes)
@@ -55,10 +49,11 @@ model.add(Dropout(0.5))
 model.add(Dense(num_classes, activation='softmax'))
 
 # Compile the model
-model.compile(loss='categorical_crossentropy',optimizer="adam",metrics=['accuracy'])
+model.compile(loss='categorical_crossentropy',optimizer=Adam(learning_rate=0.0001),metrics=['accuracy'])
 
 # Train the model
-model.fit(X_train, y_train, batch_size=64, epochs=50, validation_split=0.1)
+model.fit(X_train, y_train, batch_size=128, epochs=50, validation_split=0.1)
 
 # Save the trained model for later use
 model.save('2emotion_recognition_model.h5')
+
