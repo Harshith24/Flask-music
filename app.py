@@ -51,44 +51,44 @@ def hello_world():
 def gen_frames():  
     global currentEmotion
     global clicked
-    if not clicked:
-        while True:
-            success, frame = camera.read()  # read the camera frame
-            if not success:
-                break
-            else:
-                #convert to gray scale because dataset is trained on grayscale images
-                gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    global maxindex
+    while not clicked:
+        success, frame = camera.read()  # read the camera frame
+        if not success:
+            break
+        else:            
+            #convert to gray scale because dataset is trained on grayscale images
+            gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-                # Detect the face in the webcam
-                faces = faceCascade.detectMultiScale(gray_frame, 1.1, 5)
+            # Detect the face in the webcam
+            faces = faceCascade.detectMultiScale(gray_frame, 1.1, 5)
 
-                for (x,y,w,h) in faces:
-                    # To draw a rectangle around the detected face  
-                    cv2.rectangle(gray_frame,(x,y),(x+w,y+h),(0,255,255),2)
+            for (x,y,w,h) in faces:
+                # To draw a rectangle around the detected face  
+                cv2.rectangle(gray_frame,(x,y),(x+w,y+h),(0,255,255),2)
 
-                    # extract that specific region so we can crop and pass it into the model
-                    roi_gray_frame = gray_frame[y:y+h, x:x+w]	
-                    # roi_gray_frame = gray[y:y + h, x:x + w]		    
-                    # cropped_img = np.expand_dims(np.expand_dims(cv2.resize(roi_gray_frame, (48, 48)), -1), 0)
-                    # cropped_img = cv2.cvtColor(roi_gray_frame, cv2.COLOR_BGR2GRAY)
+                # extract that specific region so we can crop and pass it into the model
+                roi_gray_frame = gray_frame[y:y+h, x:x+w]	
+                # roi_gray_frame = gray[y:y + h, x:x + w]		    
+                # cropped_img = np.expand_dims(np.expand_dims(cv2.resize(roi_gray_frame, (48, 48)), -1), 0)
+                # cropped_img = cv2.cvtColor(roi_gray_frame, cv2.COLOR_BGR2GRAY)
 
-                    # resize, normalize, expand to 3D, pass and get prediction from model. Update the emotion result.  
-                    cropped_img = cv2.resize(roi_gray_frame, (48, 48))
-                    # cropped_img = cropped_img / 255.0
-                    cropped_img = np.expand_dims(cropped_img, axis=0)
-                    result = model.predict(cropped_img)
-                    maxindex = int(np.argmax(result))
-                    emotion_label = emotion_dict[maxindex]
-                    print(emotion_label)			    
-                    show_text[0] = maxindex 
-                    cv2.putText(gray_frame, emotion_dict[maxindex], (x+20, y-60), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2, cv2.LINE_AA)
-                
-                # Render onto the flask page
-                ret, buffer = cv2.imencode('.jpeg', gray_frame) 
-                yield (b'--frame\r\n'
-                    b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
-                currentEmotion = emotion_dict[maxindex]
+                # resize, normalize, expand to 3D, pass and get prediction from model. Update the emotion result.  
+                cropped_img = cv2.resize(roi_gray_frame, (48, 48))
+                # cropped_img = cropped_img / 255.0
+                cropped_img = np.expand_dims(cropped_img, axis=0)
+                result = model.predict(cropped_img)
+                maxindex = int(np.argmax(result))
+                emotion_label = emotion_dict[maxindex]
+                print(emotion_label)			    
+                show_text[0] = maxindex 
+                cv2.putText(gray_frame, emotion_dict[maxindex], (x+20, y-60), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2, cv2.LINE_AA)
+            
+            # Render onto the flask page
+            ret, buffer = cv2.imencode('.jpeg', gray_frame) 
+            yield (b'--frame\r\n'
+                b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
+            currentEmotion = emotion_dict[maxindex]
 
 
 @app.route('/video_feed')

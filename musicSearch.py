@@ -17,16 +17,23 @@ class SearchMusic():
     
     def search(self, emotion):
         #search for playlist
-        playlists = self.spConnect.search(q=emotion, type='playlist', limit=40)
+        playlists_response = self.spConnect.search(q=emotion, type='playlist', limit=40)
+        playlists = []
+        for playlist in playlists_response['playlists']['items']:
+            playlist_name = playlist['name']
+            playlist_id = playlist['id']
+            playlist_url = playlist['external_urls']['spotify']
+            playlists.append({'name': playlist_name, 'id': playlist_id, 'url': playlist_url})
+
         playlist = playlists[random.randint(0,40)]
-        playlist = playlist['playlists']['items']
+        # playlist = playlist['playlists']['items']
         music_dict={}
         print(playlist)
 
         # Get the playlist's tracks
-        playlist_id = playlist[0]['id']
-        playlist_name = playlist[0]['name']
-        spotify_url = playlist[0]['external_urls']['spotify']
+        playlist_id = playlist['id']
+        playlist_name = playlist['name']
+        spotify_url = playlist['url']
         # playlist_owner = playlist['owner']['display_name']
         # print(f"Playlist: {playlist_name} (by {playlist_owner})")
         tracks = self.spConnect.playlist_tracks(playlist_id)
