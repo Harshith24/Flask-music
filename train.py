@@ -8,6 +8,7 @@ from keras.utils import to_categorical
 import matplotlib.pyplot as plt
 
 data = pd.read_csv("./data/train.csv/train.csv")
+testData = pd.read_csv("./data/test.csv/test.csv")
 X_train = []
 y_train = []
 X_test = []
@@ -33,27 +34,28 @@ y_train = to_categorical(y_train, num_classes)
 model = Sequential()
 
 # Convolutional Layers
-model.add(Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=(48, 48, 1)))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Conv2D(128, kernel_size=(3, 3), activation='relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Conv2D(32, kernel_size=(3,3), activation='relu', input_shape = (48,48,1)))
+model.add(Conv2D(64, kernel_size=(3,3), activation='relu'))
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Dropout(0.25))
 
-# Flatten the data for Dense layers
+model.add(Conv2D(128, kernel_size=(3,3), activation='relu'))
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Conv2D(128, kernel_size=(3,3), activation='relu'))
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Dropout(0.25))
+
 model.add(Flatten())
-
-# Dense Layers
-model.add(Dense(64, activation='relu'))
+model.add(Dense(1024, activation='relu'))
 model.add(Dropout(0.5))
-model.add(Dense(num_classes, activation='softmax'))
+model.add(Dense(7, activation='softmax'))
 
 # Compile the model
 model.compile(loss='categorical_crossentropy',optimizer=Adam(learning_rate=0.0001),metrics=['accuracy'])
 
 # Train the model
-model.fit(X_train, y_train, batch_size=128, epochs=50, validation_split=0.1)
+model.fit(X_train, y_train, batch_size=32, epochs=100, validation_split=0.1)
 
 # Save the trained model for later use
-model.save('2emotion_recognition_model.h5')
+model.save('3emotion_recognition_model.keras')
 
