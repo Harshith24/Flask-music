@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            .grid-container {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="grid-container">
+            <p>Emotion: {{ emotion }}!</p>
+            <p>Playlist name: {{ playlistName }}!</p>
+            <a href="{{ playlistURL }}" target="_blank">Playlist URL: {{ playlistURL }}!</a>
+            <div style="align-items: left; text-align: center;">
+                <a href="http://localhost:5000/"><button style="padding: 10px 30px; white-space: nowrap;">Back</button></a>
+            </div>
+            <div style="align-items: center; text-align: center; width: 70%; height: 70%;">  
+                <ul>
+                    {% for key, value in music.items() %}
+                    <li><strong>{{ key }}:</strong> {{ value }}</li>
+                    {% endfor %}
+                </ul>   
+            </div>            
+        </div>                
+    </body>
+</html>
