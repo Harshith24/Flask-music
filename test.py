@@ -5,7 +5,7 @@ import numpy as np
 from keras.models import Sequential, Model
 from keras.optimizers import Adam
 from keras.layers import Input, Dense, Conv2D, MaxPooling2D, Dropout, Flatten
-from PIL import Image
+# from PIL import Image
 import matplotlib.pyplot as plt
 
 test_data = pd.read_csv("./data/test.csv/test.csv")
