@@ -25,7 +25,7 @@ class SearchMusic():
             playlist_url = playlist['external_urls']['spotify']
             playlists.append({'name': playlist_name, 'id': playlist_id, 'url': playlist_url})
 
-        playlist = playlists[random.randint(0,40)]
+        playlist = playlists[random.randint(0,35)]
         # playlist = playlist['playlists']['items']
         music_dict={}
         print(playlist)

@@ -1,0 +1,9 @@
+keras
+tensorflow
+spotipy
+opencv-python
+pandas
+numpy
+matplotlib
+flask
+python-dotenv   

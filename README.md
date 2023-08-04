@@ -16,3 +16,6 @@
 ### Spotify API
   Based on emotion output a playlist and song tracks along with a link.
   Emotion is stored as a global variable which is passed into the music page.
+### Docker and Travis CI
+  Docker container is used by Travis CI to deploy it onto AWS Elastic Beanstalk
+  **Issue with docker container getting feed from camera

@@ -5,6 +5,7 @@ from keras.models import Sequential, Model
 from keras.optimizers import Adam
 from keras.layers import Input, Dense, Conv2D, MaxPooling2D, Dropout, Flatten
 from musicSearch import *
+# from waitress import serve
 
 app = Flask(__name__)
 
@@ -117,4 +118,5 @@ def music_page():
     
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='localhost')
+    # serve(app, host='localhost', port=5000)
